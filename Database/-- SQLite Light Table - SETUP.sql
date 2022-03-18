@@ -1,0 +1,8 @@
+-- SQLite Light Table - SETUP
+CREATE TABLE Light (
+	Id INTEGER PRIMARY KEY,
+   	DeviceId INTEGER NOT NULL,
+	GroupId INTEGER NOT NULL,
+	LightPin TEXT NOT NULL,
+	State INTEGER NOT NULL
+);

@@ -1,0 +1,6 @@
+-- SQLite Light Table - DATA
+BEGIN TRANSACTION;
+INSERT INTO Light VALUES (1, 1, 1, '1', 1);
+INSERT INTO Light VALUES (2, 1, 1, '2', 1);
+INSERT INTO Light VALUES (3, 2, 1, '1', 1);
+COMMIT;
