@@ -1,0 +1,11 @@
+You need Expo CLI to run the development environment
+npm install -g expo-cli
+
+To start the app use,
+expo start
+
+If you get unauthorized access, then change your execution policy to unrestricted.
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+
+After you are done you can set it back if you want to
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
