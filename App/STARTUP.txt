@@ -1,6 +1,9 @@
 You need Expo CLI to run the development environment
 npm install -g expo-cli
 
+You may, or may not need performe  a node module install.
+npm install
+
 To start the app use,
 expo start
 

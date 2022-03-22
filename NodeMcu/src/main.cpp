@@ -1,34 +1,36 @@
-/*
- Name:		NodeMcu.ino
- Created:	2/4/2022 8:45:17 AM
- Author:	Koldborg
-*/
-
 #include "Light.h"
 #include "LightStates.h"
+#include <Arduino.h>
 #include <algorithm>
 #include <vector>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <uri/UriBraces.h>
 
-
 using namespace std;
 
-const char* ssid = "NodeMCU_Station_Mode";
-const char* password = "h5pd091121_Styrer";
+const char* ssid = ""; //Make it get ssid and password from a file that will not be pushed to Git
+const char* password = "";
 
 ESP8266WebServer server(80);
 
 vector<Light> Lights =
 {
-    Light(D7),
+    Light(D5),
     Light(D6)
 };
 
+void handle_OnConnect();
+void handle_LedOn();
+void handle_LedOff();
+void handle_LedBlink();
+void handle_NotFound();
+String SendHTML(vector<Light> lights);
+
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
+    //Serial.begin(115200);
     delay(100);
 
     for (int i = 0; i < Lights.size(); ++i)
@@ -49,9 +51,9 @@ void setup()
     Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
 
     server.on("/", handle_OnConnect);
-    server.on(UriBraces("/ledon/{}"), handle_ledon);
-    server.on(UriBraces("/ledoff/{}"), handle_ledoff);
-    server.on(UriBraces("/ledblink/{}"), handle_ledblink);
+    server.on(UriBraces("/ledon/{}"), handle_LedOn);
+    server.on(UriBraces("/ledoff/{}"), handle_LedOff);
+    server.on(UriBraces("/ledblink/{}"), handle_LedBlink);
     server.onNotFound(handle_NotFound);
 
     server.begin();
@@ -74,7 +76,7 @@ void handle_OnConnect()
     server.send(200, "text/html", SendHTML(Lights));
 }
 
-void handle_ledon()
+void handle_LedOn()
 {
     String pin = server.pathArg(0);
     auto iterator = find_if(Lights.begin(), Lights.end(), [&](const Light& light) { return String(light.Pin()) == pin; });
@@ -88,7 +90,7 @@ void handle_ledon()
     }
 }
 
-void handle_ledoff()
+void handle_LedOff()
 {
     String pin = server.pathArg(0);
     auto iterator = find_if(Lights.begin(), Lights.end(), [&](const Light& light) { return String(light.Pin()) == pin; });
@@ -102,7 +104,7 @@ void handle_ledoff()
     }
 }
 
-void handle_ledblink()
+void handle_LedBlink()
 {
     String pin = server.pathArg(0);
     auto iterator = find_if(Lights.begin(), Lights.end(), [&](const Light& light) { return String(light.Pin()) == pin; });

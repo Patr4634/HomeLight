@@ -1,6 +1,5 @@
-#pragma once
-#include "State.h"
 #include "Light.h"
+#include "State.h"
 
 class LightOff : public State
 {
