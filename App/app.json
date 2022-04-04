@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "App",
-    "slug": "App",
+    "name": "HomeLight",
+    "slug": "HomeLight",
+    "description": "The New Smart Home Light Generation",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,6 +21,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.TECHCOLLEGE.HomeLight",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

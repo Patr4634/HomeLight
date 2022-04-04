@@ -6,6 +6,7 @@ exports.LightRoute = function (app) {
     app.post('/Light', controller.Create);
     app.put('/Light', controller.Update);
     app.delete('/Light', controller.Delete);
+    app.post('/Light/Toggle', controller.TogglePin);
 }
 
 //exports.LightRoute = function(app) {

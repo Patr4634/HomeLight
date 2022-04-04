@@ -65,3 +65,12 @@ exports.Delete = function (req, res) {
         res.status(500).send({ errors: err });
     }
 }
+
+exports.TogglePin = function (req, res) {
+    try {
+        console.log(req.body);
+        res.status(201).send("Sup ma duhd");
+    } catch (err) {
+        res.status(500).send({ errors: err });
+    }
+}
