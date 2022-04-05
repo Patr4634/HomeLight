@@ -15,7 +15,6 @@ export async function GetLights() {
                 return res.json();
             })
             .then((data) => {
-                console.log(data);
                 return data;
             });
     } catch (err) {
@@ -23,22 +22,19 @@ export async function GetLights() {
     }
 }
 
-export async function ToggleLight(id) {
+export async function ToggleLight(id, state) {
     try {
         await fetch(endpointAddress + "toggle", {
             method: "POST",
             headers: headers,
             body: JSON.stringify({
                 id: id,
+                state: state
             }),
         })
             .then((res) => {
-                return res.json();
+                return res.status;
             })
-            .then((data) => {
-                console.log(data);
-                return data;
-            });
     } catch (err) {
         console.error(err);
     }
