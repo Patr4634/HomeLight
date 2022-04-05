@@ -1,10 +1,14 @@
+const sqlite3 = require('sqlite3').verbose();
+const fetch = require('node-fetch-commonjs');
+
+const MCUEndpoint = 'http://192.168.10.211'
+
 exports.Get = function (req, res) {
     try {
         if (parseInt(req.params.Id)) {
-            let id = req.params.Id;
+            const id = req.params.Id;
 
-            const sqlite3 = require('sqlite3').verbose();
-            let db = new sqlite3.Database('../Database/HomeLight.db');
+            const db = new sqlite3.Database('../Database/HomeLight.db');
             let sql = `SELECT * FROM Light WHERE Id = ${id};`;
 
             db.all(sql, [], (err, row) => {
@@ -25,8 +29,7 @@ exports.Get = function (req, res) {
 
 exports.GetAll = function (req, res) {
     try {
-        const sqlite3 = require('sqlite3').verbose();
-        let db = new sqlite3.Database('../Database/HomeLight.db');
+        const db = new sqlite3.Database('../Database/HomeLight.db');
         let sql = 'SELECT * FROM Light';
 
         db.all(sql, [], (err, rows) => {
@@ -42,35 +45,45 @@ exports.GetAll = function (req, res) {
     }
 }
 
-exports.Create = function (req, res) {
+exports.TogglePin = async function (req, res) {
     try {
-        res.status(201).send();
-    } catch (err) {
-        res.status(500).send({ errors: err });
-    }
-}
+        const id = req.body.id;
+        const state = req.body.state;
 
-exports.Update = function (req, res) {
-    try {
-        res.status(200).send();
-    } catch (err) {
-        res.status(500).send({ errors: err });
-    }
-}
+        if (parseInt(id)) {
+            const db = new sqlite3.Database('../Database/HomeLight.db');
 
-exports.Delete = function (req, res) {
-    try {
-        res.status(200).send();
-    } catch (err) {
-        res.status(500).send({ errors: err });
-    }
-}
+            db.all(`SELECT * FROM Light WHERE Id = ${id};`, [], (err, row) => {
+                if (err) {
+                    throw err;
+                }
 
-exports.TogglePin = function (req, res) {
-    try {
-        console.log(req.body);
-        res.status(201).send("Sup ma duhd");
+                let light = row[0];
+
+                db.all(`UPDATE Light SET State = '${state}' WHERE Id = '${id}'`, [], (err) => {
+                    if (err) {
+                        throw err;
+                    }
+
+                    fetch(MCUEndpoint + '/toggle/' + light.LightPin + '/' + light.State, {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        }
+                    })
+                        .then((response) => {
+                            res.status(response.status).send();
+                        })
+                })
+            });
+
+            return db.close();
+        }
+
+        res.status(500).send("Bad Data");
     } catch (err) {
+        console.log(err);
         res.status(500).send({ errors: err });
     }
 }
