@@ -1,0 +1,8 @@
+You may, or may not need performe  a node module install.
+npm install
+
+To start the api use,
+npm start
+
+If you want live update, then use,
+nodemon start

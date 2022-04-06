@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const fetch = require('node-fetch-commonjs');
 
-const MCUEndpoint = 'http://192.168.10.211'
+const MCUEndpoint = ''
 
 exports.Get = function (req, res) {
     try {
@@ -49,6 +49,8 @@ exports.TogglePin = async function (req, res) {
     try {
         const id = req.body.id;
         const state = req.body.state;
+
+console.log(req.body);
 
         if (parseInt(id)) {
             const db = new sqlite3.Database('../Database/HomeLight.db');
