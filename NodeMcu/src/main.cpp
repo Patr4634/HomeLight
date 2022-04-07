@@ -17,7 +17,8 @@ ESP8266WebServer server(80);
 vector<Light> Lights =
     {
         Light(D5),
-        Light(D6)};
+        Light(D6),
+        Light(D7)};
 
 void handle_LedToggle();
 void handle_NotFound();
@@ -71,9 +72,6 @@ void handle_LedToggle()
     String pin = server.pathArg(0); 
     String state = server.pathArg(1);
 
-    Serial.println(pin);
-    Serial.println(state);
-
     auto iterator = find_if(Lights.begin(), Lights.end(), [&](const Light &light)
                             { return String(light.Pin()) == pin; });
 
@@ -83,13 +81,16 @@ void handle_LedToggle()
     }
     else
     {
-        if (state == "1")
+        Serial.println(state);
+        if (state == "0")
         {
+            Serial.println((*iterator).Pin());
             (*iterator).ChangeState(LightOn::Instance());
             return server.send(200, "text/html");
         }
-        else if (state == "0")
+        else if (state == "1")
         {
+            Serial.println((*iterator).Pin());
             (*iterator).ChangeState(LightOff::Instance());
             return server.send(200, "text/html");
         }

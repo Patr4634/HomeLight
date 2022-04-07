@@ -13,7 +13,7 @@ exports.Get = function (req, res) {
 
             db.all(sql, [], (err, row) => {
                 if (err) {
-                    throw err;
+                    res.status(500).send({ errors: err });
                 }
                 res.status(200).send(row);
             });
@@ -34,7 +34,7 @@ exports.GetAll = function (req, res) {
 
         db.all(sql, [], (err, rows) => {
             if (err) {
-                throw err;
+                res.status(500).send({ errors: err });
             }
             res.status(200).send(rows);
         });
@@ -50,21 +50,19 @@ exports.TogglePin = async function (req, res) {
         const id = req.body.id;
         const state = req.body.state;
 
-console.log(req.body);
-
         if (parseInt(id)) {
             const db = new sqlite3.Database('../Database/HomeLight.db');
 
             db.all(`SELECT * FROM Light WHERE Id = ${id};`, [], (err, row) => {
                 if (err) {
-                    throw err;
+                    res.status(500).send({ errors: err });
                 }
 
                 let light = row[0];
 
                 db.all(`UPDATE Light SET State = '${state}' WHERE Id = '${id}'`, [], (err) => {
                     if (err) {
-                        throw err;
+                        res.status(500).send({ errors: err });
                     }
 
                     fetch(MCUEndpoint + '/toggle/' + light.LightPin + '/' + light.State, {
